@@ -24,3 +24,15 @@ class MaterialForm(ModelForm):
     class Meta:
         model = Material
         fields = ["material_use", "amounts"]
+
+
+class OperationCostForm(ModelForm):
+    class Meta:
+        model = OperationCost
+        fields = ["machinery_name", "uint", "amounts"]
+
+
+class PriceListForm(ModelForm):
+    class Meta:
+        model = PriceList
+        fields = ["chapter_number", "item_number", "description", "unit", "amounts"]

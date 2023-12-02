@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.forms.widgets import NumberInput
 from django.db import models
-from .models import (Performance, Machinery, Employee, Material, OperationCost)
+from .models import (Performance, Machinery, Employee,
+                     Material, OperationCost, PriceList)
 
 
 class AmountsSplit:
@@ -43,6 +44,13 @@ class MaterialAdmin(AmountsSplit, admin.ModelAdmin):
 class OperationCostAdmin(AmountsSplit, admin.ModelAdmin):
     list_display = ["machinery_name", "uint", "view_amounts_split"]
     search_fields = ["machinery_name"]
+
+
+@admin.register(PriceList)
+class OperationCostAdmin(AmountsSplit, admin.ModelAdmin):
+    list_display = ["chapter_number", "item_number", "description",
+                    "unit", "amounts"]
+    search_fields = ["item_number", "description"]
 
 
 admin.site.site_header = "پنل مدیریتی"

@@ -3,7 +3,15 @@ from django.utils.translation import gettext_lazy as _
 
 
 # Create your models here.
-class Performance(models.Model):
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("تاریخ ثبت"))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("تاریخ بروزرسانی "))
+
+    class Meta:
+        abstract = True
+
+
+class Performance(BaseModel):
     group = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("احجام اجرایی"))
     typeـoperation = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("نوع عملیات"))
     amounts = models.IntegerField(blank=True, null=True, verbose_name=_("مقادیر"))
@@ -16,7 +24,7 @@ class Performance(models.Model):
         verbose_name_plural = _("احجام اجرایی پروژها")
 
 
-class Machinery(models.Model):
+class Machinery(BaseModel):
     car_name = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("نام ماشین‌آلات"))
     amounts = models.IntegerField(blank=True, null=True, verbose_name=_("بهای کرایه ماهانه"))
 
@@ -40,7 +48,7 @@ class Employee(models.Model):
         verbose_name_plural = _("کارمندان")
 
 
-class Material(models.Model):
+class Material(BaseModel):
     material_use = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("مواد و مصالح مصرفی"))
     amounts = models.IntegerField(blank=True, null=True, verbose_name=_(" هزینه تهیه یاخرید"))
 
@@ -52,9 +60,8 @@ class Material(models.Model):
         verbose_name_plural = _("مواد و مصالح")
 
 
-class OperationCost(models.Model):
-    machinery_name = models.ForeignKey(Machinery, verbose_name=_("نام ماشین‌آلات"), on_delete=models.CASCADE,
-                                       related_name="machinery_names")
+class OperationCost(BaseModel):
+    machinery_name = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("نام ماشین‌آلات"))
     uint = models.IntegerField(blank=True, null=True, verbose_name=_("واحد"))
     amounts = models.IntegerField(blank=True, null=True, verbose_name=_("بهای‌واحد عملیات اجرای"))
 
@@ -65,3 +72,17 @@ class OperationCost(models.Model):
         verbose_name = _("هزینه عملیات اجرایی")
         verbose_name_plural = _("هزینه‌های عملیات اجرایی ")
 
+
+class PriceList(BaseModel):
+    chapter_number = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("شماره فصل"))
+    item_number = models.IntegerField(blank=True, null=True, verbose_name=_("شماره آيتم"))
+    description = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("شرح"))
+    unit = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("واحد"))
+    amounts = models.IntegerField(blank=True, null=True, verbose_name=_("بهاي واحد (ریال)"))
+
+    def __str__(self):
+        return self.description
+
+    class Meta:
+        verbose_name = _("فهرست بها")
+        verbose_name_plural = _("فهرست بها ")

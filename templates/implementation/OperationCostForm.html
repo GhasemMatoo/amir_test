@@ -1,52 +1,46 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-  <title>هزینه عملیات اجرایی- ماهه اول</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body>
-
-<div class="container">
-  <h2>فرم هزینه عملیات اجرایی</h2>
+{% extends "main.html" %}
+{% load static %}
+{% block Tabel %}
+    <h2>فرم هزینه عملیات اجرایی</h2>
+        <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">شماره</th>
+            <th scope="col">نام ماشین‌آلات</th>
+            <th scope="col">واحد</th>
+            <th scope="col">بهای‌واحد عملیات اجرای (ریال)</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for operationcost in OperationCost %}
+        <tr>
+            <th scope="row">{{ priceList.id }}</th>
+            <td>{{ operationcost.machinery_name }}</td>
+            <td>{{ operationcost.uint }}</td>
+            <td>{{ priceList.amounts }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+{% block Forms %}
+    <h2>فرم هزینه عملیات اجرایی</h2>
     <form action="{% url 'implementation:OperationCost_Form' %}" method="post">
         {% csrf_token %}
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="inputPassword4">نام ماشین‌آلات</label>
-          <input type="text" class="form-control" name="machinery_name" placeholder="نام ماشین‌آلات" >
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">نام ماشین‌آلات</label>
+                <input type="text" class="form-control" name="machinery_name" placeholder="نام ماشین‌آلات">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">واحد</label>
+                <input type="text" class="form-control" name="uint" placeholder="واحد">
+            </div>
         </div>
-        <div class="form-group col-md-6">
-          <label for="inputEmail4">واحد</label>
-          <input type="text" class="form-control" name="uint" placeholder="واحد">
+        <div class="form-group ">
+            <label for="inputAddress">بهای‌واحد عملیات اجرای ریال</label>
+            <input type="text" class="form-control" name="amounts" placeholder="بهای‌واحد عملیات اجرای ریال">
         </div>
-      </div>
-      <div class="form-group ">
-        <label for="inputAddress">بهای‌واحد عملیات اجرای ریال</label>
-        <input type="text" class="form-control" name="amounts" placeholder="بهای‌واحد عملیات اجرای ریال">
-      </div>
-      <button type="submit" class="btn btn-primary">ثبت هزینه عملیات اجرایی</button>
+        <button type="submit" class="btn btn-primary">ثبت هزینه عملیات اجرایی</button>
     </form>
-</div>
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-        {% if message.tags in "'success','warning'"%}
-            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}  col-md-4 col-md-offset-4"
-                 role="alert">
-              {{ message }}
-            </div>
-        {% elif message.tags == 'error' %}
-            <div class="alert alert-danger col-md-4 col-md-offset-4"
-                 role="alert">
-              {{ message }}
-            </div>
-        {% endif %}
-    {% endfor %}
-</ul>
-{% endif %}
-</body>
-</html>
+{% endblock %}

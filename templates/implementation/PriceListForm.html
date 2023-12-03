@@ -1,62 +1,61 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-  <title>فهرست‌بهای واحد پایه رشته سدسازی -سال 1401</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body>
+{% extends "main.html" %}
+{% load static %}
+{% block Tabel %}
+    <h2>فرم هزینه عملیات اجرایی</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">شماره</th>
+            <th scope="col">شماره فصل</th>
+            <th scope="col">شماره آيتم</th>
+            <th scope="col">شرح</th>
+            <th scope="col">واحد</th>
+            <th scope="col">بهاي واحد (ریال)</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for priceList in PriceList %}
+        <tr>
+            <th scope="row">{{ priceList.id }}</th>
+            <td>{{ priceList.chapter_number }}</td>
+            <td>{{ priceList.item_number }}</td>
+            <td>{{ priceList.description }}</td>
+            <td>{{ priceList.unit }}</td>
+            <td>{{ priceList.amounts }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
 
-<div class="container">
-  <h2>فرم فهرست بها</h2>
+{% block Forms %}
+    <h2>فرم فهرست بها</h2>
     <form action="{% url 'implementation:PriceList_Form' %}" method="post">
         {% csrf_token %}
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="inputPassword4">شماره فصل</label>
-          <input type="text" class="form-control" name="chapter_number" placeholder="شماره فصل" >
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">شماره فصل</label>
+                <input type="text" class="form-control" name="chapter_number" placeholder="شماره فصل">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">شماره آيتم</label>
+                <input type="text" class="form-control" name="item_number" placeholder="شماره آيتم">
+            </div>
         </div>
-        <div class="form-group col-md-6">
-          <label for="inputEmail4">شماره آيتم</label>
-          <input type="text" class="form-control" name="item_number" placeholder="شماره آيتم">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">واحد</label>
+                <input type="text" class="form-control" name="unit" placeholder="واحد">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">بهاي واحد به ریال</label>
+                <input type="text" class="form-control" name="amounts" placeholder="بهاي واحد به ریال">
+            </div>
         </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="inputPassword4">واحد</label>
-          <input type="text" class="form-control" name="unit" placeholder="واحد" >
+        <div class="form-group ">
+            <label for="inputAddress">شرح</label>
+            <input type="text" class="form-control" name="description" placeholder="شرح">
         </div>
-        <div class="form-group col-md-6">
-          <label for="inputEmail4">بهاي واحد به ریال</label>
-          <input type="text" class="form-control" name="amounts" placeholder="بهاي واحد به ریال">
-        </div>
-      </div>
-      <div class="form-group ">
-        <label for="inputAddress">شرح</label>
-        <input type="text" class="form-control" name="description" placeholder="شرح">
-      </div>
-      <button type="submit" class="btn btn-primary">ثبت فهرست بها</button>
+        <button type="submit" class="btn btn-primary">ثبت فهرست بها</button>
     </form>
-</div>
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-        {% if message.tags in "'success','warning'"%}
-            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}  col-md-4 col-md-offset-4"
-                 role="alert">
-              {{ message }}
-            </div>
-        {% elif message.tags == 'error' %}
-            <div class="alert alert-danger col-md-4 col-md-offset-4"
-                 role="alert">
-              {{ message }}
-            </div>
-        {% endif %}
-    {% endfor %}
-</ul>
-{% endif %}
-</body>
-</html>
+{% endblock %}

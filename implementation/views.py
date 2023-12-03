@@ -14,12 +14,14 @@ class PerformanceFormViews(ListView):
     template_name = 'implementation/PerformanceForm.html'
     model = Performance
     form_class = PerformanceForm
-    context_object_name = 'performance'
+    context_object_name = 'Performance'
+    paginate_by = 10
 
-    def get(self, request, **kwargs):
+    def get_context_data(self, **kwargs):
         form = self.form_class()
-        context = {'form': form}
-        return render(request, self.template_name, context)
+        context = super().get_context_data(**kwargs)
+        context['form'] = form
+        return context
 
     def post(self, request, **kwargs):
         form = self.form_class(request.POST)
@@ -31,8 +33,7 @@ class PerformanceFormViews(ListView):
                 messages.add_message(request, messages.WARNING, "لطفا مقادیر خالی ارسال نکنید.")
         else:
             messages.add_message(request, messages.ERROR, "داده وارد شده صحیح نیست و این داده ثبت نگردید.")
-        context = {'form': form}
-        return render(request, self.template_name, context)
+        return render(request, self.template_name)
 
 
 class SourceFormViews(View):
@@ -93,11 +94,13 @@ class OperationCostFormViews(ListView):
     model = OperationCost
     form_class = OperationCostForm
     context_object_name = 'OperationCost'
+    paginate_by = 10
 
-    def get(self, request, **kwargs):
+    def get_context_data(self, **kwargs):
         form = self.form_class()
-        context = {'form': form}
-        return render(request, self.template_name, context)
+        context = super().get_context_data(**kwargs)
+        context['form'] = form
+        return context
 
     def post(self, request, **kwargs):
         form = self.form_class(request.POST)
@@ -109,8 +112,7 @@ class OperationCostFormViews(ListView):
                 messages.add_message(request, messages.WARNING, "لطفا مقادیر خالی ارسال نکنید.")
         else:
             messages.add_message(request, messages.ERROR, "داده وارد شده صحیح نیست و این داده ثبت نگردید.")
-        context = {'form': form}
-        return render(request, self.template_name, context)
+        return render(request, self.template_name)
 
 
 class PriceListFormViews(ListView):
@@ -118,11 +120,13 @@ class PriceListFormViews(ListView):
     model = PriceList
     form_class = PriceListForm
     context_object_name = 'PriceList'
+    paginate_by = 10
 
-    def get(self, request, **kwargs):
+    def get_context_data(self, **kwargs):
         form = self.form_class()
-        context = {'form': form}
-        return render(request, self.template_name, context)
+        context = super().get_context_data(**kwargs)
+        context['form'] = form
+        return context
 
     def post(self, request, **kwargs):
         form = self.form_class(request.POST)
@@ -134,5 +138,4 @@ class PriceListFormViews(ListView):
                 messages.add_message(request, messages.WARNING, "لطفا مقادیر خالی ارسال نکنید.")
         else:
             messages.add_message(request, messages.ERROR, "داده وارد شده صحیح نیست و این داده ثبت نگردید.")
-        context = {'form': form}
-        return render(request, self.template_name, context)
+        return render(request, self.template_name)

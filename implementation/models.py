@@ -12,8 +12,10 @@ class BaseModel(models.Model):
 
 
 class Performance(BaseModel):
-    group = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("احجام اجرایی"))
+    group = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("گروه احجام اجرایی"))
+    part = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("بخش "))
     typeـoperation = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("نوع عملیات"))
+    unit = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("واحد"))
     amounts = models.IntegerField(blank=True, null=True, verbose_name=_("مقادیر"))
 
     def __str__(self):
@@ -86,3 +88,35 @@ class PriceList(BaseModel):
     class Meta:
         verbose_name = _("فهرست بها")
         verbose_name_plural = _("فهرست بها ")
+
+
+class ResourceAllocation(BaseModel):
+    performance = models.ForeignKey(Performance, on_delete=models.CASCADE)
+    amounts_total_work_contractors = models.IntegerField(
+        blank=True, null=True, verbose_name=_("مقادیر کار انجام شده  توسط پیمانکاران در دوره (ریال)"))
+    active_day_shift = models.IntegerField(blank=True, null=True, verbose_name=_("تعداد روزهای فعال شیفت روز"))
+    active_night_shift = models.IntegerField(blank=True, null=True, verbose_name=_("تعداد روزهای فعال شیفت شب"))
+    number_work_shifts = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("تعداد شیفت کاری"))
+    day_shift_hours = models.IntegerField(blank=True, null=True, verbose_name=_("ساعت کاری شیفت روز"))
+    night_shift_hours = models.IntegerField(blank=True, null=True, verbose_name=_("ساعت کاری شیفت شب"))
+    number_active_shifts = models.IntegerField(blank=True, null=True, verbose_name=_("تعداد شیفت فعال"))
+    carrying_distance = models.FloatField(blank=True, null=True, verbose_name=_("فاصله حمل"))
+    number_services_hour = models.IntegerField(blank=True, null=True, verbose_name=_("تعداد سرویس در ساعت"))
+    hours_normal_implement_enterprise_machines = models.FloatField(
+        blank=True, null=True, verbose_name=_("نرم ساعتی اجرا شده توسط ماشین آلات سازمانی"))
+
+    amounts = models.IntegerField(blank=True, null=True, verbose_name=_("بهاي واحد (ریال)"))
+    machinery = models.ForeignKey(Machinery, on_delete=models.CASCADE)
+    percents_machinery = models.IntegerField(blank=True, null=True, verbose_name=_("درصد ماشین"))
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    percents_employee = models.IntegerField(blank=True, null=True, verbose_name=_("درصد نرم نیروی انسانی "))
+    material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    percents_material = models.IntegerField(blank=True, null=True, verbose_name=_("درصد نرم مصالح"))
+    Impact_factor = models.FloatField(blank=True, null=True, verbose_name=_("ضریب تأثیر"))
+
+    def __str__(self):
+        return self.description
+
+    class Meta:
+        verbose_name = _("اطلاعات ورودی تخصیص منابع")
+        verbose_name_plural = _("اطلاعاتهای ورودی تخصیص منابع ")

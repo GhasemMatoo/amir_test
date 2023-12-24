@@ -3,9 +3,10 @@ from django.views.generic import ListView
 from django.views import View
 from django.contrib import messages
 
-from implementation.models import (Performance, OperationCost, PriceList)
+from implementation.models import (Performance, OperationCost, PriceList, ResourceAllocation)
 from implementation.forms import (
-    PerformanceForm, MachineryForm, EmployeeForm, MaterialForm, OperationCostForm, PriceListForm
+    PerformanceForm, MachineryForm, EmployeeForm, MaterialForm,
+    OperationCostForm, PriceListForm, ResourceAllocationForm
 )
 # Create your views here.
 
@@ -119,6 +120,32 @@ class PriceListFormViews(ListView):
     template_name = 'implementation/PriceListForm.html'
     model = PriceList
     form_class = PriceListForm
+    context_object_name = 'PriceList'
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        form = self.form_class()
+        context = super().get_context_data(**kwargs)
+        context['form'] = form
+        return context
+
+    def post(self, request, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            if None not in form.cleaned_data.values():
+                form.save()
+                messages.add_message(request, messages.SUCCESS, "داده وارد شده ثبت گردید.")
+            else:
+                messages.add_message(request, messages.WARNING, "لطفا مقادیر خالی ارسال نکنید.")
+        else:
+            messages.add_message(request, messages.ERROR, "داده وارد شده صحیح نیست و این داده ثبت نگردید.")
+        return render(request, self.template_name)
+
+
+class ResourceAllocationFormViews(ListView):
+    template_name = 'implementation/ResourceAllocation.html'
+    model = ResourceAllocation
+    form_class = ResourceAllocationForm
     context_object_name = 'PriceList'
     paginate_by = 10
 

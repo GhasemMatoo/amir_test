@@ -1,6 +1,30 @@
 {% extends "main.html" %}
 {% load static %}
-
+{% block Tabel %}
+    <h2>فرم فهرست‌بها</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">شماره</th>
+            <th scope="col">گروه</th>
+            <th scope="col">بخش</th>
+            <th scope="col">تعداد شیفت فعال</th>
+            <th scope="col">نرم ساعتی اجرا شده توسط ماشین آلات سازمانی</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for resourceallocationin in ResourceAllocation %}
+        <tr>
+            <th scope="row">{{ resourceallocationin.id }}</th>
+            <td>{{ resourceallocationin.performance.group }}</td>
+            <td>{{ resourceallocationin.performance.part }}</td>
+            <td>{{ resourceallocationin.number_active_shifts }}</td>
+            <td>{{ resourceallocationin.hours_normal_implement_enterprise_machines }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
 {% block Forms %}
     <h2>اطلاعات ورودی تخصیص منابع</h2>
     <form action="{% url 'implementation:ResourceAllocation_Form' %}" method="post">
@@ -8,7 +32,7 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputEmail4">مقادیر کار انجام شده توسط پیمانکاران</label>
-                <input type="text" class="form-control" name="uint" placeholder="مقادیر کار انجام شده  توسط پیمانکاران">
+                <input type="text" class="form-control" name="amounts_total_work_contractors" placeholder="مقادیر کار انجام شده  توسط پیمانکاران">
             </div>
             <div class="form-group col-md-6">
                 <label for="inputPassword4">هزینه عملیات اجرایی</label>
@@ -38,70 +62,16 @@
             </div>
             <div class="form-group col-md-6">
                 <label for="inputPassword4">ساعت کاری شیفت شب</label>
-                <input type="text" class="form-control" name="night_shift_hours " placeholder="ساعت کاری شیفت شب">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">تعداد شیفت فعال</label>
-                <input type="text" class="form-control" name="number_active_shifts" placeholder="تعداد شیفت فعال">
+                <input type="text" class="form-control" name="night_shift_hours" placeholder="ساعت کاری شیفت شب">
             </div>
             <div class="form-group col-md-6">
                 <label for="inputEmail4">فاصله حمل</label>
                 <input type="text" class="form-control" name="carrying_distance" placeholder="فاصله حمل">
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-12">
                 <label for="inputPassword4">تعداد سرویس در ساعت</label>
-                <input type="text" class="form-control" name="number_services_hour " placeholder="تعداد سرویس در ساعت">
+                <input type="text" class="form-control" name="number_services_hour" placeholder="تعداد سرویس در ساعت">
             </div>
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">نرم ساعتی اجرا شده توسط ماشین آلات سازمانی</label>
-                <input type="text" class="form-control" name="hours_normal_implement_enterprise_machines "
-                       placeholder="نرم ساعتی اجرا شده توسط ماشین آلات سازمانی">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">بهاي واحد (ریال)</label>
-                <input type="text" class="form-control" name="amounts" placeholder="بهاي واحد (ریال)">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputPassword4">درصد ماشین</label>
-                <input type="text" class="form-control" name="percents_machinery " placeholder="تعداد سرویس در ساعت">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">ماشین</label>
-                <select class="form-control" name="machinery">
-                    {% for machinery in form.machinery %}
-                        <option>{{ machinery }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputPassword4">درصد نرم نیروی انسانی</label>
-                <input type="text" class="form-control" name="percents_employee " placeholder="درصد نرم نیروی انسانی">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">نیروی انسانی</label>
-                <select class="form-control" name="employee">
-                    {% for employee in form.employee %}
-                        <option>{{ employee }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">درصد نرم مصالح</label>
-                <input type="text" class="form-control" name="percents_material"
-                       placeholder="درصد نرم مصالح">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">نرم مصالح</label>
-                <select class="form-control" name="material">
-                    {% for material in form.material %}
-                        <option>{{ material }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div class="form-group ">
-            <label for="inputAddress">بهای‌واحد عملیات اجرای ریال</label>
-            <input type="text" class="form-control" name="amounts" placeholder="بهای‌واحد عملیات اجرای ریال">
         </div>
         <button type="submit" class="btn btn-primary">ثبت هزینه عملیات اجرایی</button>
     </form>

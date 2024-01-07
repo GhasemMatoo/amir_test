@@ -93,7 +93,7 @@ class PriceList(BaseModel):
 class ResourceAllocation(BaseModel):
     performance = models.ForeignKey(Performance, on_delete=models.CASCADE)
     amounts_total_work_contractors = models.IntegerField(
-        blank=True, null=True, verbose_name=_("مقادیر کار انجام شده  توسط پیمانکاران در دوره (ریال)"))
+        blank=True, null=True, verbose_name=_("مقادیر کار انجام شده توسط پیمانکاران (ریال)"))
     active_day_shift = models.IntegerField(blank=True, null=True, verbose_name=_("تعداد روزهای فعال شیفت روز"))
     active_night_shift = models.IntegerField(blank=True, null=True, verbose_name=_("تعداد روزهای فعال شیفت شب"))
     number_work_shifts = models.CharField(max_length=250, blank=True, null=True, verbose_name=_("تعداد شیفت کاری"))
@@ -104,15 +104,6 @@ class ResourceAllocation(BaseModel):
     number_services_hour = models.IntegerField(blank=True, null=True, verbose_name=_("تعداد سرویس در ساعت"))
     hours_normal_implement_enterprise_machines = models.FloatField(
         blank=True, null=True, verbose_name=_("نرم ساعتی اجرا شده توسط ماشین آلات سازمانی"))
-
-    amounts = models.IntegerField(blank=True, null=True, verbose_name=_("بهاي واحد (ریال)"))
-    machinery = models.ForeignKey(Machinery, on_delete=models.CASCADE)
-    percents_machinery = models.IntegerField(blank=True, null=True, verbose_name=_("درصد ماشین"))
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    percents_employee = models.IntegerField(blank=True, null=True, verbose_name=_("درصد نرم نیروی انسانی "))
-    material = models.ForeignKey(Material, on_delete=models.CASCADE)
-    percents_material = models.IntegerField(blank=True, null=True, verbose_name=_("درصد نرم مصالح"))
-    Impact_factor = models.FloatField(blank=True, null=True, verbose_name=_("ضریب تأثیر"))
 
     def __str__(self):
         return self.description

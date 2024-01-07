@@ -146,7 +146,7 @@ class ResourceAllocationFormViews(ListView):
     template_name = 'implementation/ResourceAllocation.html'
     model = ResourceAllocation
     form_class = ResourceAllocationForm
-    context_object_name = 'PriceList'
+    context_object_name = 'ResourceAllocation'
     paginate_by = 10
 
     def get_context_data(self, **kwargs):
@@ -159,6 +159,12 @@ class ResourceAllocationFormViews(ListView):
         form = self.form_class(request.POST)
         if form.is_valid():
             if None not in form.cleaned_data.values():
+                dict_data = form.cleaned_data.values().mapping
+                form.instance.number_active_shifts = (dict_data["active_day_shift"]*dict_data["day_shift_hours"]) +\
+                                                     (dict_data["active_night_shift"]*dict_data["night_shift_hours"])
+                form.instance.hours_normal_implement_enterprise_machines = \
+                    (dict_data["performance"].amounts-dict_data["amounts_total_work_contractors"]) /\
+                    form.instance.number_active_shifts
                 form.save()
                 messages.add_message(request, messages.SUCCESS, "داده وارد شده ثبت گردید.")
             else:

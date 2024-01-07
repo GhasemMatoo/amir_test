@@ -47,10 +47,6 @@ class ResourceAllocationForm(ModelForm):
             "performance",
             "amounts_total_work_contractors", "active_day_shift",
             "active_night_shift", "number_work_shifts",
-            "day_shift_hours", "night_shift_hours", "number_active_shifts",
+            "day_shift_hours", "night_shift_hours",
             "carrying_distance", "number_services_hour",
-            "hours_normal_implement_enterprise_machines",
-            "amounts", "machinery", "percents_machinery",
-            "material", "percents_material", "employee",
-            "percents_employee"
         ]

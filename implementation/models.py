@@ -104,9 +104,13 @@ class ResourceAllocation(BaseModel):
     number_services_hour = models.IntegerField(blank=True, null=True, verbose_name=_("تعداد سرویس در ساعت"))
     hours_normal_implement_enterprise_machines = models.FloatField(
         blank=True, null=True, verbose_name=_("نرم ساعتی اجرا شده توسط ماشین آلات سازمانی"))
+    impact_factor = models.FloatField(blank=True, null=True, verbose_name=_("ضریب تأثیر"))
+    calc_bulldozer = models.IntegerField(blank=True, null=True, verbose_name=_("محاصبه بلدوزر"))
+    calc_loader = models.IntegerField(blank=True, null=True, verbose_name=_("محاصبه لودر"))
+    calc_bil_micanici = models.IntegerField(blank=True, null=True, verbose_name=_("محاصبه بیل میکانیکی"))
 
     def __str__(self):
-        return self.description
+        return self.performance.__str__()
 
     class Meta:
         verbose_name = _("اطلاعات ورودی تخصیص منابع")

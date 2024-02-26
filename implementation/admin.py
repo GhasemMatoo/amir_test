@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.forms.widgets import NumberInput
 from django.db import models
 from .models import (Performance, Machinery, Employee,
-                     Material, OperationCost, PriceList)
+                     Material, OperationCost, PriceList, ResourceAllocation)
 
 
 class AmountsSplit:
@@ -51,6 +51,12 @@ class OperationCostAdmin(AmountsSplit, admin.ModelAdmin):
     list_display = ["chapter_number", "item_number", "description",
                     "unit", "amounts"]
     search_fields = ["item_number", "description"]
+
+
+@admin.register(ResourceAllocation)
+class ResourceAllocationAdmin(admin.ModelAdmin):
+    list_display = ["performance", "hours_normal_implement_enterprise_machines"]
+    search_fields = ["performance", "hours_normal_implement_enterprise_machines"]
 
 
 admin.site.site_header = "پنل مدیریتی"

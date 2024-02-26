@@ -3,11 +3,15 @@ from django.views.generic import ListView
 from django.views import View
 from django.contrib import messages
 
-from implementation.models import (Performance, OperationCost, PriceList, ResourceAllocation)
+from implementation.models import (
+    Performance, OperationCost, PriceList, ResourceAllocation,
+    Machinery, Employee, Material
+)
 from implementation.forms import (
     PerformanceForm, MachineryForm, EmployeeForm, MaterialForm,
     OperationCostForm, PriceListForm, ResourceAllocationForm
 )
+from implementation.calculator import resource_allocation_calc, machinery_form_calc
 # Create your views here.
 
 
@@ -157,18 +161,33 @@ class ResourceAllocationFormViews(ListView):
 
     def post(self, request, **kwargs):
         form = self.form_class(request.POST)
+        object_list = ResourceAllocation.objects.all()
+        context = self.get_context_data(object_list=object_list, **kwargs)
         if form.is_valid():
-            if None not in form.cleaned_data.values():
-                dict_data = form.cleaned_data.values().mapping
-                form.instance.number_active_shifts = (dict_data["active_day_shift"]*dict_data["day_shift_hours"]) +\
-                                                     (dict_data["active_night_shift"]*dict_data["night_shift_hours"])
-                form.instance.hours_normal_implement_enterprise_machines = \
-                    (dict_data["performance"].amounts-dict_data["amounts_total_work_contractors"]) /\
-                    form.instance.number_active_shifts
-                form.save()
-                messages.add_message(request, messages.SUCCESS, "داده وارد شده ثبت گردید.")
+            dict_data = form.cleaned_data.values().mapping
+            if request.POST['save_next']:
+                instance = form.instance
+                instance = resource_allocation_calc(instance, dict_data)
+                instance.save()
+                context["machinery_list"] = Machinery.objects.all()
+                context["employee_list"] = Employee.objects.all()
+                context["material_list"] = Material.objects.all()
+                context["source_form"] = True
+                context["instance_id"] = instance.id
+                return render(request, self.template_name, context=context)
             else:
                 messages.add_message(request, messages.WARNING, "لطفا مقادیر خالی ارسال نکنید.")
+        elif form.data.get('save_list'):
+            instance = ResourceAllocation.objects.get(id=form.data.get(' instance_id '))
+            if instance:
+                for key, val in form.data.items():
+                    if ',' in key and val != "" and val.isnumeric():
+                        item_id, item_name, item_amount = key.split(',')
+                        machinery_form_calc(instance, item_name, item_amount, val)
+                        instance.save()
+                return render(request, self.template_name, context=context)
+            else:
+                messages.add_message(request, messages.ERROR, "داده وارد شده صحیح نیست و این داده ثبت نگردید.")
         else:
             messages.add_message(request, messages.ERROR, "داده وارد شده صحیح نیست و این داده ثبت نگردید.")
         return render(request, self.template_name)

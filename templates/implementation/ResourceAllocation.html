@@ -9,18 +9,20 @@
             <th scope="col">گروه</th>
             <th scope="col">بخش</th>
             <th scope="col">تعداد شیفت فعال</th>
+            <th scope="col"> تعداد سرویس در ساعت</th>
             <th scope="col">نرم ساعتی اجرا شده توسط ماشین آلات سازمانی</th>
         </tr>
         </thead>
         <tbody>
         {% for resourceallocationin in ResourceAllocation %}
-        <tr>
-            <th scope="row">{{ resourceallocationin.id }}</th>
-            <td>{{ resourceallocationin.performance.group }}</td>
-            <td>{{ resourceallocationin.performance.part }}</td>
-            <td>{{ resourceallocationin.number_active_shifts }}</td>
-            <td>{{ resourceallocationin.hours_normal_implement_enterprise_machines }}</td>
-        </tr>
+            <tr>
+                <th scope="row">{{ resourceallocationin.id }}</th>
+                <td>{{ resourceallocationin.performance.group }}</td>
+                <td>{{ resourceallocationin.performance.part }}</td>
+                <td>{{ resourceallocationin.number_active_shifts }}</td>
+                <td>{{ resourceallocationin.number_services_hour }}</td>
+                <td>{{ resourceallocationin.hours_normal_implement_enterprise_machines }}</td>
+            </tr>
         {% endfor %}
         </tbody>
     </table>
@@ -30,49 +32,60 @@
     <form action="{% url 'implementation:ResourceAllocation_Form' %}" method="post">
         {% csrf_token %}
         <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">مقادیر کار انجام شده توسط پیمانکاران</label>
-                <input type="text" class="form-control" name="amounts_total_work_contractors" placeholder="مقادیر کار انجام شده  توسط پیمانکاران">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputPassword4">هزینه عملیات اجرایی</label>
-                <select class="form-control" name="performance">
-                    {% for performance in form.performance %}
-                        <option>{{ performance }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputPassword4"> تعداد روزهای فعال شیفت روز </label>
-                <input type="text" class="form-control" name="active_day_shift"
-                       placeholder="تعداد روزهای فعال شیفت روز">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">تعداد روزهای فعال شیفت شب</label>
-                <input type="text" class="form-control" name="active_night_shift"
-                       placeholder="تعداد روزهای فعال شیفت شب">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputPassword4">تعداد شیفت کاری</label>
-                <input type="text" class="form-control" name="number_work_shifts" placeholder="تعداد شیفت کاری">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">ساعت کاری شیفت روز</label>
-                <input type="text" class="form-control" name="day_shift_hours" placeholder="ساعت کاری شیفت روز">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputPassword4">ساعت کاری شیفت شب</label>
-                <input type="text" class="form-control" name="night_shift_hours" placeholder="ساعت کاری شیفت شب">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">فاصله حمل</label>
-                <input type="text" class="form-control" name="carrying_distance" placeholder="فاصله حمل">
-            </div>
-            <div class="form-group col-md-12">
-                <label for="inputPassword4">تعداد سرویس در ساعت</label>
-                <input type="text" class="form-control" name="number_services_hour" placeholder="تعداد سرویس در ساعت">
-            </div>
+            {% if not source_form %}
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">مقادیر کار انجام شده توسط پیمانکاران</label>
+                    <input type="text" class="form-control" name="amounts_total_work_contractors"
+                           placeholder="مقادیر کار انجام شده  توسط پیمانکاران">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4">هزینه عملیات اجرایی</label>
+                    <select class="form-control" name="performance">
+                        {% for performance in form.performance %}
+                            <option>{{ performance }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4"> تعداد روزهای فعال شیفت روز </label>
+                    <input type="text" class="form-control" name="active_day_shift"
+                           placeholder="تعداد روزهای فعال شیفت روز">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">تعداد روزهای فعال شیفت شب</label>
+                    <input type="text" class="form-control" name="active_night_shift"
+                           placeholder="تعداد روزهای فعال شیفت شب">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4">تعداد شیفت کاری</label>
+                    <input type="text" class="form-control" name="number_work_shifts" placeholder="تعداد شیفت کاری">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">ساعت کاری شیفت روز</label>
+                    <input type="text" class="form-control" name="day_shift_hours" placeholder="ساعت کاری شیفت روز">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4">ساعت کاری شیفت شب</label>
+                    <input type="text" class="form-control" name="night_shift_hours" placeholder="ساعت کاری شیفت شب">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">فاصله حمل</label>
+                    <input type="text" class="form-control" name="carrying_distance" placeholder="فاصله حمل">
+                </div>
+            <button type="submit" class="btn btn-primary" name="save_next" value="True">ثبت و ادامه</button>
+        {% else %}
+            <h3>اطلاعات ورودی ماشین‌آلات و کارمندان و مواد و مصالح مصرفی</h3>
+                <input type="hidden" name=" instance_id " value="{{ instance_id }}">
+            {% for machinery in machinery_list %}
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">{{ machinery.car_name }} درصد</label>
+                    <input type="text" class="form-control" name="{{ machinery.id }},{{ machinery.car_name }},{{ machinery.amounts }}"
+                           placeholder="{{ machinery.car_name }}">
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary" name="save_list" value="True">ثبت اطلاعات ورودی</button>
+
+        {% endif %}
         </div>
-        <button type="submit" class="btn btn-primary">ثبت هزینه عملیات اجرایی</button>
     </form>
 {% endblock %}
